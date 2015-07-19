@@ -18,13 +18,14 @@ class SteamOpenId(OpenIdAuth):
         return self._user_id(response)
 
     def get_user_details(self, response):
+        user_id = self._user_id(response)
         player = self.get_json(USER_INFO, params={
             'key': self.setting('API_KEY'),
-            'steamids': self._user_id(response)
+            'steamids': user_id
         })
         if len(player['response']['players']) > 0:
             player = player['response']['players'][0]
-            details = {'username': player.get('personaname'),
+            details = {'username': user_id,  # player.get('personaname'),
                        'email': '',
                        'fullname': '',
                        'first_name': '',
